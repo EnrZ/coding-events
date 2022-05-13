@@ -1,19 +1,13 @@
 <!DOCTYPE html>
 <hmtl lang="en" xmlns:th="http://www.thymeleaf.org/">
-    <head>
-        <meta charset="UTF-8"/>
-        <title>Coding Events</title>
-    </head>
+    <head th:replace="fragments :: head"></head>
 
-    <body>
+    <body class = "container">
 
     <h1>Coding Events</h1>
 
-    <nav>
-        <ul>
-            <li><a href="/events"> All Events</a> </li>
-        </ul>
-    </nav>
+    <!--how to bring fragments in, file name and idenfier which was named in other file-->
+  <nav th:replace="fragments :: navigation"></nav>
 
     </body>
 </hmtl>

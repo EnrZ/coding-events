@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<hmtl lang="en" xmlns:th="http://www.thymeleaf.org/">
+    <head th:fragment="head">
+        <meta charset="UTF-8"/>
+        <title>Coding Events</title>
+
+        <!-- static resources-->
+
+        <!--script th:src="@{/script.js}"--><!--/script-->
+        <!--link th:href="@{/styles.css}" rel="stylesheet"-->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
+    </head>
+
+    <body>
+    <h1>All Events</h1>
+    <!--html file comments syntax reminder-->
+    <!--navigation is the identifier that can be referenced when using this fragment in other files-->
+    <nav th:fragment="navigation">
+        <ul class = "nav">
+            <li class="nav-item"><a class="nav-link" href="/events"> All Events</a> </li>
+            <li class="nav-item"><a class="nav-link" href="/events/create">Create Event</a></li>
+        </ul>
+    </nav>
+    </body>
+</hmtl>
