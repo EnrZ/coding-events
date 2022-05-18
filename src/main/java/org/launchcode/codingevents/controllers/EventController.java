@@ -1,5 +1,6 @@
 package org.launchcode.codingevents.controllers;
 
+import org.launchcode.codingevents.models.Event;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +15,8 @@ import java.util.List;
 @RequestMapping("events")
 public class EventController {
 
-    private static List<String> events = new ArrayList<>();
+    //private static List<String> events = new ArrayList<>(); changed to a list of objects after starting with model class
+    private static List<Event> events = new ArrayList<>();
 
     @GetMapping
     public String displayAllEvents(Model model){
@@ -38,10 +40,10 @@ public class EventController {
     //lives at /events/create(its okay for this and last method to have the same path because one
     //uses GET and this is POST
     @PostMapping("create")
-    public String createEvent(@RequestParam String eventName) {
+    public String createEvent(@RequestParam String eventName, @RequestParam String eventDescription) {
         //eventName is name of the text input given in create.html
 
-        events.add(eventName);
+        events.add(new Event(eventName, eventDescription));
 
         //return a redirect reponse that instructs the browser to go to a different page
         //redirect: means redirect to root path for this controller
