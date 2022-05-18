@@ -1,5 +1,6 @@
 package org.launchcode.codingevents.controllers;
 
+import org.launchcode.codingevents.data.EventData;
 import org.launchcode.codingevents.models.Event;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,8 +16,8 @@ import java.util.List;
 @RequestMapping("events")
 public class EventController {
 
-    //private static List<String> events = new ArrayList<>(); changed to a list of objects after starting with model class
-    private static List<Event> events = new ArrayList<>();
+    //not needed after adding data layer, EventData
+    //private static List<Event> events = new ArrayList<>();
 
     @GetMapping
     public String displayAllEvents(Model model){
@@ -27,7 +28,7 @@ public class EventController {
 //        events.add("SpringOne Platform");
 //        model.addAttribute("events", events);
 
-        model.addAttribute("events", events);
+        model.addAttribute("events", EventData.getAll());
         return "events/index";
     }
 
@@ -43,7 +44,7 @@ public class EventController {
     public String createEvent(@RequestParam String eventName, @RequestParam String eventDescription) {
         //eventName is name of the text input given in create.html
 
-        events.add(new Event(eventName, eventDescription));
+        EventData.addNew(new Event(eventName, eventDescription));
 
         //return a redirect reponse that instructs the browser to go to a different page
         //redirect: means redirect to root path for this controller

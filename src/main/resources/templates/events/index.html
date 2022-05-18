@@ -15,6 +15,9 @@
             <thead>
                 <tr>
                     <th>
+                        ID
+                    </th>
+                    <th>
                         Name
                     </th>
                     <th>
@@ -24,7 +27,8 @@
             </thead>
             <!--   -->
             <tr th:each="event : ${events}">
-            <td th:text="${event.name}"> </td>
+                <td th:text="${event.id}"> </td>
+                <td th:text="${event.name}"> </td>
                 <td th:text="${event.description}"> </td>
             </tr>
         </table>
