@@ -51,4 +51,28 @@ public class EventController {
         return  "redirect:";
 
     }
+
+    @GetMapping("delete")
+    public String displayDeleteEventForm(Model model){
+        //the model parameter is a different model than the EventData class
+        model.addAttribute("title","Delete Events");
+        model.addAttribute("events", EventData.getAll());
+        return "events/delete";
+    }
+
+    @PostMapping("delete")
+    public String processDeleteEventForm(@RequestParam(required = false) int[] eventIds) {
+        //delete.html has the checkbox eventIds which will be submitted as an
+        //int array so the request param will be an array(and the name has to match)
+
+        //required = false allows method to be called without any eventIds, now we have to account for null
+        if (eventIds != null) {
+            for (int id : eventIds) {
+                EventData.remove(id);
+            }
+
+        }
+        return "redirect:";
+    }
+
 }
