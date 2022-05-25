@@ -33,6 +33,7 @@ public class Event {
 
     public Event(){
         this.id=nextId;
+        nextId++;
     }
 
     public String getName() {
