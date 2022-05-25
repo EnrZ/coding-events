@@ -24,6 +24,9 @@ public class Event {
     private String contactEmail;
 
     private EventType type;
+
+    @NotBlank(message = "Location is required")
+    private String location;
     public Event(String name, String description, String contactEmail, EventType type) {
         this();
         this.name = name;
@@ -71,6 +74,14 @@ public class Event {
 
     public void setType(EventType type) {
         this.type = type;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     @Override
