@@ -4,8 +4,10 @@ import org.launchcode.codingevents.data.EventData;
 import org.launchcode.codingevents.models.Event;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,19 +33,32 @@ public class EventController {
 
     //lives at /events/create since that is the prefix(request mapping)
     @GetMapping("create")
-    public String renderCreateEventForm(){
+    public String renderCreateEventForm(Model model){
+
+        //the empty event object just made will have information about the fields
+        model.addAttribute(new Event());
         return "events/create";
+
     }
 
     //lives at /events/create(its okay for this and last method to have the same path because one
     //uses GET and this is POST
     @PostMapping("create")
-    public String createEvent(@ModelAttribute Event newEvent) {
+    public String createEvent(@ModelAttribute @Valid Event newEvent, Errors errors, Model model) {
+        //for validation, the controller checks the criteria set in the model like @Size min max etc.
+
         //ModelAttribute is the key piece of model binding, have to back and change form names so Spring can find name and description and binding can work
 
         //eventName is name of the text input given in create.html
 
+        if(errors.hasErrors()){
+            model.addAttribute("title", "Create Event");
+            //changes made to create template now that error attribute added
+            return "events/create";
+        }
+
         EventData.addNew(newEvent);
+
 
         //return a redirect reponse that instructs the browser to go to a different page
         //redirect: means redirect to root path for this controller
