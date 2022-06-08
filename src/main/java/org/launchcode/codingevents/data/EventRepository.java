@@ -8,3 +8,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface EventRepository extends CrudRepository<Event, Integer> {
 }
+
+//the reason a class like "public class MyRepository implements EventRepos... isnt needed
+// (remember interfaces are just a blueprint) is that spring boot sees this interface and creates it on its own
