@@ -1,23 +1,25 @@
 package org.launchcode.codingevents.controllers;
 
-import org.launchcode.codingevents.data.EventData;
+import org.launchcode.codingevents.data.EventRepository;
 import org.launchcode.codingevents.models.Event;
 import org.launchcode.codingevents.models.EventType;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 @RequestMapping("events")
 public class EventController {
 
-    //not needed after adding data layer, EventData
-    //private static List<Event> events = new ArrayList<>();
+    //sprint boot dependency injection feature
+    @Autowired
+    private EventRepository eventRepository;
+
+    //findALl,save, FindById(all methods are part of EventRepository interface)
 
     @GetMapping
     public String displayAllEvents(Model model){
@@ -28,7 +30,7 @@ public class EventController {
 //        events.add("SpringOne Platform");
 //        model.addAttribute("events", events);
 
-        model.addAttribute("events", EventData.getAll());
+        model.addAttribute("events", eventRepository.findAll());
         return "events/index";
     }
 
@@ -62,7 +64,7 @@ public class EventController {
             return "events/create";
         }
 
-        EventData.addNew(newEvent);
+       eventRepository.save(newEvent);
 
 
         //return a redirect reponse that instructs the browser to go to a different page
@@ -75,7 +77,7 @@ public class EventController {
     public String displayDeleteEventForm(Model model){
         //the model parameter is a different model than the EventData class
         model.addAttribute("title","Delete Events");
-        model.addAttribute("events", EventData.getAll());
+        model.addAttribute("events", eventRepository.findAll());
         return "events/delete";
     }
 
@@ -87,7 +89,7 @@ public class EventController {
         //required = false allows method to be called without any eventIds, now we have to account for null
         if (eventIds != null) {
             for (int id : eventIds) {
-                EventData.remove(id);
+                eventRepository.deleteById(id);
             }
 
         }
