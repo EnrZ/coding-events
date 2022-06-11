@@ -3,23 +3,18 @@ package org.launchcode.codingevents.models;
 import org.springframework.boot.convert.DataSizeUnit;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.util.Objects;
 
 //POJO Events plain old java objects
 @Entity
-public class Event {
+public class Event extends AbstractEntity {
 
     //each unique event object we create has own integer
 
     //counter no longer needed, generaedvalue lets database generate it
-    @Id
-    @GeneratedValue
-    private int id;
+
     @Size(min = 3, max = 50, message = "Name must be between 3 and 50 characters.")
     @NotBlank(message = "Name is required")
     private String name;
@@ -55,9 +50,7 @@ public class Event {
         return description;
     }
 
-    public int getId() {
-        return id;
-    }
+
 
     public void setDescription(String description) {
         this.description = description;
@@ -79,18 +72,7 @@ public class Event {
         this.type = type;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Event event = (Event) o;
-        return id == event.id;
-    }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
 
     @Override
     public String toString() {
