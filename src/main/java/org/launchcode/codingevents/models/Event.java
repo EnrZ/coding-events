@@ -3,8 +3,10 @@ package org.launchcode.codingevents.models;
 import org.springframework.boot.convert.DataSizeUnit;
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 //POJO Events plain old java objects
@@ -26,12 +28,15 @@ public class Event extends AbstractEntity {
     @NotBlank(message = "Email is required")
     private String contactEmail;
 
-    private EventType type;
-    public Event(String name, String description, String contactEmail, EventType type) {
+    //going to be a many-to-one relationships, many events in one category. jpa annotations needed to specify this
+    @ManyToOne
+    @NotNull(message = "Category is required")
+    private EventCategory eventCategory;
+    public Event(String name, String description, String contactEmail, EventCategory eventCategory) {
         this.name = name;
         this.description = description;
         this.contactEmail = contactEmail;
-        this.type = type;
+        this.eventCategory = eventCategory;
     }
 
     public Event(){
@@ -64,15 +69,14 @@ public class Event extends AbstractEntity {
         this.contactEmail = contactEmail;
     }
 
-    public EventType getType() {
-        return type;
+
+    public EventCategory getEventCategory() {
+        return eventCategory;
     }
 
-    public void setType(EventType type) {
-        this.type = type;
+    public void setEventCategory(EventCategory eventCategory) {
+        this.eventCategory = eventCategory;
     }
-
-
 
     @Override
     public String toString() {

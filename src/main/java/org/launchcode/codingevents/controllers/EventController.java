@@ -1,8 +1,8 @@
 package org.launchcode.codingevents.controllers;
 
+import org.launchcode.codingevents.data.EventCategoryRepository;
 import org.launchcode.codingevents.data.EventRepository;
 import org.launchcode.codingevents.models.Event;
-import org.launchcode.codingevents.models.EventType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,6 +18,9 @@ public class EventController {
     //sprint boot dependency injection feature
     @Autowired
     private EventRepository eventRepository;
+
+    @Autowired
+    private EventCategoryRepository eventCategoryRepository;
 
     //findALl,save, FindById(all methods are part of EventRepository interface)
 
@@ -41,8 +44,8 @@ public class EventController {
         //the empty event object just made will have information about the fields
         model.addAttribute("event" , new Event());
 
-        //returns an array of the 4 values in enum, addAttribute always needs label/attribute name
-        model.addAttribute("types",EventType.values());
+        //types enum is now categories passed into the template
+        model.addAttribute("categories",eventCategoryRepository.findAll());
 
         return "events/create";
 
