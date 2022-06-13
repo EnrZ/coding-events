@@ -3,23 +3,20 @@ package org.launchcode.codingevents.models;
 import org.springframework.boot.convert.DataSizeUnit;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.Objects;
 
 //POJO Events plain old java objects
 @Entity
-public class Event {
+public class Event extends AbstractEntity {
 
     //each unique event object we create has own integer
 
     //counter no longer needed, generaedvalue lets database generate it
-    @Id
-    @GeneratedValue
-    private int id;
+
     @Size(min = 3, max = 50, message = "Name must be between 3 and 50 characters.")
     @NotBlank(message = "Name is required")
     private String name;
@@ -31,12 +28,15 @@ public class Event {
     @NotBlank(message = "Email is required")
     private String contactEmail;
 
-    private EventType type;
-    public Event(String name, String description, String contactEmail, EventType type) {
+    //going to be a many-to-one relationships, many events in one category. jpa annotations needed to specify this
+    @ManyToOne
+    @NotNull(message = "Category is required")
+    private EventCategory eventCategory;
+    public Event(String name, String description, String contactEmail, EventCategory eventCategory) {
         this.name = name;
         this.description = description;
         this.contactEmail = contactEmail;
-        this.type = type;
+        this.eventCategory = eventCategory;
     }
 
     public Event(){
@@ -55,9 +55,7 @@ public class Event {
         return description;
     }
 
-    public int getId() {
-        return id;
-    }
+
 
     public void setDescription(String description) {
         this.description = description;
@@ -71,25 +69,13 @@ public class Event {
         this.contactEmail = contactEmail;
     }
 
-    public EventType getType() {
-        return type;
+
+    public EventCategory getEventCategory() {
+        return eventCategory;
     }
 
-    public void setType(EventType type) {
-        this.type = type;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Event event = (Event) o;
-        return id == event.id;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
+    public void setEventCategory(EventCategory eventCategory) {
+        this.eventCategory = eventCategory;
     }
 
     @Override
