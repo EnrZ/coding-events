@@ -2,8 +2,11 @@ package org.launchcode.codingevents.models;
 
 import org.springframework.boot.convert.DataSizeUnit;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -15,27 +18,23 @@ public class Event extends AbstractEntity {
 
     //each unique event object we create has own integer
 
-    //counter no longer needed, generaedvalue lets database generate it
+    //one-to-one relationship between event and EventDtails. Only a one way relationship, EventDetails doesnt know about Event
+    @OneToOne(cascade = CascadeType.ALL)//Tells hibernate to cascade every operation of an object to its subject(event to EventDetails) eg. whenever an Event is saved, also save the associated EventDetails object.
+    @Valid
+    @NotNull
+    private EventDetails eventDetails;
 
     @Size(min = 3, max = 50, message = "Name must be between 3 and 50 characters.")
     @NotBlank(message = "Name is required")
     private String name;
-    @Size(max = 500, message = "Description too long!")
-    private String description;
 
-
-    @Email(message = "Invalid email. Try again.")
-    @NotBlank(message = "Email is required")
-    private String contactEmail;
 
     //going to be a many-to-one relationships, many events in one category. jpa annotations needed to specify this
     @ManyToOne
     @NotNull(message = "Category is required")
     private EventCategory eventCategory;
-    public Event(String name, String description, String contactEmail, EventCategory eventCategory) {
+    public Event(String name, EventCategory eventCategory) {
         this.name = name;
-        this.description = description;
-        this.contactEmail = contactEmail;
         this.eventCategory = eventCategory;
     }
 
@@ -51,31 +50,20 @@ public class Event extends AbstractEntity {
         this.name = name;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getContactEmail() {
-        return contactEmail;
-    }
-
-    public void setContactEmail(String contactEmail) {
-        this.contactEmail = contactEmail;
-    }
-
-
     public EventCategory getEventCategory() {
         return eventCategory;
     }
 
     public void setEventCategory(EventCategory eventCategory) {
         this.eventCategory = eventCategory;
+    }
+
+    public EventDetails getEventDetails() {
+        return eventDetails;
+    }
+
+    public void setEventDetails(EventDetails eventDetails) {
+        this.eventDetails = eventDetails;
     }
 
     @Override
