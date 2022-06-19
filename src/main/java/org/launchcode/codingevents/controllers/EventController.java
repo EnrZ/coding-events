@@ -115,4 +115,22 @@ public class EventController {
         return "redirect:";
     }
 
+    @GetMapping("detail")
+    public String displayEventDetails(@RequestParam Integer eventId, Model model){
+
+        Optional<Event> result = eventRepository.findById(eventId);
+
+        if(result.isEmpty()){
+            String template = String.format("Invalid Event ID  %s", eventId);
+            model.addAttribute("title", template);
+        } else {
+            Event event = result.get();
+            String template = String.format("Events in category %s", event.getName());
+            model.addAttribute("title", template);
+            model.addAttribute("event", event);
+        }
+
+        return "events/detail";
+    }
+
 }
