@@ -2,8 +2,11 @@ package org.launchcode.codingevents.controllers;
 
 import org.launchcode.codingevents.data.EventCategoryRepository;
 import org.launchcode.codingevents.data.EventRepository;
+import org.launchcode.codingevents.data.TagRepository;
 import org.launchcode.codingevents.models.Event;
 import org.launchcode.codingevents.models.EventCategory;
+import org.launchcode.codingevents.models.Tag;
+import org.launchcode.codingevents.models.dto.EventTagDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,6 +26,9 @@ public class EventController {
 
     @Autowired
     private EventCategoryRepository eventCategoryRepository;
+
+    @Autowired
+    private TagRepository tagRepository;
 
     //findALl,save, FindById(all methods are part of EventRepository interface)
 
@@ -128,9 +134,42 @@ public class EventController {
             String template = String.format("Events in category %s", event.getName());
             model.addAttribute("title", template);
             model.addAttribute("event", event);
+            model.addAttribute("tags",event.getTags());
         }
 
         return "events/detail";
+    }
+//responds to /events/add-tag?eventId=________
+    @GetMapping("add-tag")
+    public String displayAddTagForm(@RequestParam Integer eventId, Model model){
+        Optional<Event> result = eventRepository.findById(eventId);
+        Event event = result.get();
+        String template = String.format("Add Tag to:  %s", event.getName());
+        model.addAttribute("title", template);
+        model.addAttribute("tags",tagRepository.findAll());
+        EventTagDTO eventTag = new EventTagDTO();
+        eventTag.setEvent(event);
+        model.addAttribute("eventTag",eventTag);
+
+        return "events/add-tag.html";
+    }
+
+    @PostMapping("add-tag")
+    public String processAddTagForm(@ModelAttribute @Valid EventTagDTO eventTag, Errors errors, Model model){
+
+        if(!errors.hasErrors()){
+            Event event = eventTag.getEvent();
+            Tag tag = eventTag.getTag();
+
+            if(!event.getTags().contains(tag)){
+                event.addTag(tag);
+
+                //sents changes to database
+                eventRepository.save(event);
+            }
+            return "redirect:detail?eventId=" + event.getId();
+        }
+        return "redirect:add-tag";
     }
 
 }
